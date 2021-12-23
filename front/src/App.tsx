@@ -6,11 +6,10 @@ let players: Player[] = []
 
 const App: React.VFC = () => {
     const [rows, setRows] = React.useState(players)
-    const hostname = process.env.REACT_APP_SERVER_NAME
     useEffect(() => {
         const getData = async() => {
             const result = await axios(
-                `http://${hostname}:8080/api/players`
+                `/api/players`
             )
             setRows(result.data)
         }
