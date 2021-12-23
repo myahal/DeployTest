@@ -4,11 +4,26 @@ Deploy のテストをするためのソースコード
 バックエンドはSpring、フロントエンドはReactで作ってある
 DBはPostgreSQLを使用
 
+```
 createdb playerdb
 createdb playerdb-test
+```
 
 ## バックエンドの起動
-環境変数としてDB_HOST, DB_PORT, DB_USERが必要
+接続先DB情報はprofileで切り替える。
+`main/resources/application-xxx.properties`に接続情報を記載の上
+
+```
+ ./gradlew bootRun --args='--spring.profiles.active=xxx'
+```
+か
+```
+./gradlew build
+java  -Dspring.profiles.active=xxx -jar ./build/libs/backend-0.0.1-SNAPSHOT.jar
+```
+で実行。
+
+IntelliJで実行する場合はRun/Debug ConfigurationsのEnvironemt variablesに `SPRING_PROFILES_ACTIVE=xxx`を設定する
 
 
 起動すると自動でスキーマと初期データが投入される（２件）
