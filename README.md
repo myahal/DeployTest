@@ -5,24 +5,61 @@ Deploy のテストをするためのソースコード
 DBはPostgreSQLを使用
 
 ```
-createdb playerdb
-createdb playerdb-test
+createdb playerdb -O <dbuser>
+createdb playerdb-test -O <dbuser>
+```
+
+## テーブルの用意
+
+```
+% psql -U <dbuser> playerdb
+
+playerdb=> \dt
+Did not find any relations.
+playerdb=> create table if not exists players (id serial primary key, first_name text, last_name text);
+CREATE TABLE
+playerdb=> insert into players (first_name, last_name) values ('taro', 'yamada');
+insert into players (first_name, last_name) values ('jiro', 'sato');
+INSERT 0 1
+INSERT 0 1
+playerdb=> \q
 ```
 
 ## 起動
-接続先DB情報はprofileで切り替える。
-`main/resources/application-xxx.properties`に接続情報を記載
-起動時にspring.profiles.activeで環境を指定する
+DB接続情報は環境変数から取得する
 
-ローカルでの起動
+###ローカルでの起動
+
 ```
 cd front
 yarn build
 cd ../backend
- ./gradlew bootRun --args='--spring.profiles.active=local'
+ ./gradlew build
 
- access localhost:8080
+ DBHOST=<dbhost> DBUSER=<dbuser> DBPASSWORD=<dbpass> java -jar -Dspring.profiles.active=local build/libs/backend-0.0.1-SNAPSHOT.jar
 ```
-起動すると自動でスキーマと初期データが投入される（２件）
 
-`GET http://localhost:8080/api/players`  のみ有効
+`http://localhost:8080` で一覧が出ればOK
+
+バックエンドは`GET http://localhost:8080/api/players`  のみ有効
+
+
+### Dockerでの起動
+```
+docker-compose up -d
+```
+
+DB接続情報はdocker/variables.envに設定する。
+dockerディレクトリの構成は以下の通り
+
+```
+.
+├── Dockerfile
+├── db
+│   ├── data
+│   └── initdb
+│       ├── 1-create-players.sql
+│       ├── 2-insert-players.sql
+│       └── 3-user.sql
+└── variables.env
+```

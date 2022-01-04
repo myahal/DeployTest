@@ -6,6 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:docker": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test",
     "postbuild": "node ./postbuild.js"
