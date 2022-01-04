@@ -18,4 +18,5 @@ ENV DBUSER=${DBUSER}
 ENV DBPASSWORD=${DBPASSWORD}
 COPY --from=backend /tmp/backend/build/libs/backend-0.0.1-SNAPSHOT.jar ./app.jar
 EXPOSE 8080
-CMD ["sh", "-c", "DBHOST=${DBHOST} DBUSER=${DBUSER} DBPASSWORD=${DBPASSWORD} java -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "DBHOST=${DBHOST} DBUSER=${DBUSER} DBPASSWORD=${DBPASSWORD} java -jar app.jar"]
+CMD ["DBHOST=${DBHOST} DBUSER=${DBUSER} DBPASSWORD=${DBPASSWORD}"]
